@@ -21,12 +21,13 @@ Route::get('test', function () {
     ]);
 });
 
-Route::get('/{chat?}/{conversation_id?}', function () {
+Route::get('/{chat?}/{conversation_id?}', function ($chat = null, $conversation_id = null) {
     $service = new \App\Services\CopilotApi();
     $hasGithubToken = $service->hasGithubToken();
 
     return view('home', [
         'hasGithubToken' => $hasGithubToken,
+        'conversation_id' => $conversation_id,
     ]);
 });
 

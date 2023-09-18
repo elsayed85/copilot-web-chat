@@ -152,7 +152,7 @@
 
 <!-- scripts -->
 <script>
-    window.conversation_id = "";
+    window.conversation_id = "{{ $conversation_id }}";
 </script>
 <script src="{{ asset('js/icons.js') }}"></script>
 <script src="{{ asset('js/chat.js') }}" defer></script>
