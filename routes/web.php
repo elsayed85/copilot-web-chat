@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use OpenAI\Laravel\Facades\OpenAI;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('test', function () {
+    $stream = OpenAI::completions()->createStreamed([
+        'model' => 'text-davinci-003',
+        'prompt' => 'This is a test',
+        'max_tokens' => 1024,
+    ]);
+});
 
 Route::get('/{chat?}/{conversation_id?}', function () {
     $service = new \App\Services\CopilotApi();

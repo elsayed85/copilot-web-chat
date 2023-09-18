@@ -18,6 +18,8 @@ class CopilotApi
 
     private array $rules;
 
+    public array $choices;
+
     public function __construct()
     {
         $this->github_token = Cache::get('github_token');
@@ -124,7 +126,7 @@ class CopilotApi
     /**
      * @throws \Exception
      */
-    public function query($req): array
+    public function query($req)
     {
         $response = Http::withHeaders([
             'User-Agent' => config('github-copilot-chat.user_agent'),
@@ -144,18 +146,13 @@ class CopilotApi
             ];
         }
 
-        $data = $response->body();
-
-        return [
-            'type' => 'success',
-            'text' => $this->getFinalString($data),
-        ];
+        return $response->toPsrResponse();
     }
 
     /**
      * @throws \Exception
      */
-    public function send(): string
+    public function send()
     {
         if (empty($this->messages)) {
             throw new \Exception('No messages to send');
@@ -166,7 +163,7 @@ class CopilotApi
         $response = $this->query($req);
 
         if ($response) {
-            return $response['text'];
+            return (new StreamResponse(CreateStreamedResponse::class, $response))->getIterator();
         }
 
         throw new \Exception('No response from Copilot');
