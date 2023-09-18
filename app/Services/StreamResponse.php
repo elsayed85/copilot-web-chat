@@ -29,7 +29,6 @@ class StreamResponse
 
     public function getIterator(): Generator
     {
-
         while (! $this->response->getBody()->eof()) {
             $line = $this->readLine($this->response->getBody());
 

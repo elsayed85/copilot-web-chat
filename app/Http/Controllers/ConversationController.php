@@ -19,7 +19,8 @@ class ConversationController extends Controller
 
         return response()->stream(function () use ($reply) {
             foreach ($reply as $response) {
-                $text = $response->choices[0]->text;
+                usleep(20000);
+                $text = $response->choices[0]->content;
                 if (connection_aborted()) {
                     break;
                 }
@@ -28,6 +29,7 @@ class ConversationController extends Controller
                 flush();
             }
 
+            echo "\n\n";
             ob_flush();
             flush();
         }, 200, [

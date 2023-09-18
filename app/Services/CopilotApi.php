@@ -18,6 +18,10 @@ class CopilotApi
 
     private array $rules;
 
+    private $response;
+
+    private $responseClass;
+
     public array $choices;
 
     public function __construct()

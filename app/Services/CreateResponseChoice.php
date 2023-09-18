@@ -7,7 +7,7 @@ namespace App\Services;
 class CreateResponseChoice
 {
     private function __construct(
-        public readonly string $text,
+        public readonly string $content,
         public readonly int $index,
         public readonly ?string $finishReason,
     ) {
@@ -31,7 +31,7 @@ class CreateResponseChoice
     public function toArray(): array
     {
         return [
-            'text' => $this->text,
+            'content' => $this->content,
             'index' => $this->index,
             'finish_reason' => $this->finishReason,
         ];
