@@ -61,8 +61,6 @@ const ask_gpt = async (message) => {
         window.scrollTo(0, 0);
         window.controller = new AbortController();
 
-        jailbreak = document.getElementById("jailbreak");
-        model = document.getElementById("model");
         prompt_lock = true;
         window.text = ``;
         window.token = message_id();
@@ -102,8 +100,6 @@ const ask_gpt = async (message) => {
             body: JSON.stringify({
                 conversation_id: window.conversation_id,
                 action: `_ask`,
-                model: model.options[model.selectedIndex].value,
-                jailbreak: jailbreak.options[jailbreak.selectedIndex].value,
                 meta: {
                     id: window.token,
                     content: {
@@ -340,8 +336,8 @@ const add_message = async (conversation_id, role, content) => {
 };
 
 const load_conversations = async (limit, offset, loader) => {
-    //console.log(loader);
-    //if (loader === undefined) box_conversations.appendChild(spinner);
+    // console.log(loader);
+    if (loader === undefined) box_conversations.appendChild(spinner);
 
     let conversations = [];
     for (let i = 0; i < localStorage.length; i++) {
@@ -351,7 +347,7 @@ const load_conversations = async (limit, offset, loader) => {
         }
     }
 
-    //if (loader === undefined) spinner.parentNode.removeChild(spinner)
+    if (loader === undefined) spinner.parentNode.removeChild(spinner)
     await clear_conversations();
 
     for (conversation of conversations) {
@@ -444,7 +440,7 @@ window.onload = async () => {
 };
 
 const register_settings_localstorage = async () => {
-    settings_ids = ["switch", "model", "jailbreak"];
+    settings_ids = ["switch"];
     settings_elements = settings_ids.map((id) => document.getElementById(id));
     settings_elements.map((element) =>
         element.addEventListener(`change`, async (event) => {
@@ -463,7 +459,7 @@ const register_settings_localstorage = async () => {
 };
 
 const load_settings_localstorage = async () => {
-    settings_ids = ["switch", "model", "jailbreak"];
+    settings_ids = ["switch"];
     settings_elements = settings_ids.map((id) => document.getElementById(id));
     settings_elements.map((element) => {
         if (localStorage.getItem(element.id)) {

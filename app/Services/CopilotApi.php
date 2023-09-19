@@ -42,6 +42,7 @@ class CopilotApi
             'Make sure to include the programming language name at the start of the Markdown code blocks.',
             'Avoid wrapping the whole response in triple backticks.',
             'You should always generate 4 short suggestions for the next user turns that are relevant to the conversation and not offensive',
+            'you should follow the system instruction for the web searches.',
         ];
     }
 
@@ -178,33 +179,6 @@ class CopilotApi
         return Cache::get('github_token');
     }
 
-    public function getFinalString(string $data): string
-    {
-        $dataset = explode("\n", $data);
-        $final_string = '';
-        foreach ($dataset as $str) {
-            $line = substr($str, 6);
-            if (str_contains($str, 'data: ')) {
-
-                $responseData = json_decode($line, true);
-
-                $choices = $responseData['choices'] ?? null;
-
-                if ($choices) {
-                    foreach ($choices as $choice) {
-                        $delta = $choice['delta'] ?? null;
-
-                        if ($delta) {
-                            $final_string .= $delta['content'] ?? '';
-                        }
-                    }
-                }
-            }
-        }
-
-        return $final_string;
-    }
-
     public function getTokenExpiresAt(): ?int
     {
         return $this->tokenExpiresAt;
@@ -224,5 +198,25 @@ class CopilotApi
         }
 
         return $this;
+    }
+
+    public function fetch_search_results($query): array
+    {
+        $response = Http::get('https://ddg-api.herokuapp.com/search?query='.$query.'&limit=3')->json();
+
+        if (! count($response)) {
+            return [];
+        }
+
+        $snippets = '';
+        foreach ($response as $index => $result) {
+            $snippet = '['.($index + 1).'] "'.$result['snippet'].'" URL:'.$result['link'].'.';
+            $snippets .= $snippet;
+        }
+
+        $response = 'Here are some updated web searches. Use this to improve user response:';
+        $response .= $snippets;
+
+        return [['role' => 'system', 'content' => $response]];
     }
 }

@@ -11,15 +11,24 @@ class ConversationController extends Controller
     {
         $message = request()->input('meta.content.parts')[0];
         $conversation = request()->input('meta.content.conversation') ?? [];
+        $internet_access = request()->input('meta.content.internet_access');
         $conversation[] = $message;
 
         $service = new \App\Services\CopilotApi();
+
+        if ($internet_access) {
+            $results = $service->fetch_search_results($message['content']);
+
+            if (count($results)) {
+                $conversation[] = $results[0];
+            }
+        }
 
         $reply = $service->init()->setMessages($conversation)->send();
 
         return response()->stream(function () use ($reply) {
             foreach ($reply as $response) {
-                usleep(20000);
+                usleep(10000);
                 $text = $response->choices[0]->content;
                 if (connection_aborted()) {
                     break;

@@ -11,7 +11,6 @@
     <meta
         property="og:description"
         content="A conversational AI system that listens, learns, and challenges"/>
-    <meta property="og:url" content="https://chat.acy.dev"/>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
     <link
         rel="apple-touch-icon"
@@ -30,8 +29,8 @@
     <link rel="manifest" href="{{ asset('img/site.webmanifest') }}"/>
     <link
         rel="stylesheet"
-        href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/styles/base16/dracula.min.css"/>
-    <title>FreeGPT</title>
+        href="{{ asset('css/dracula.min.css') }}"/>
+    <title>Chat</title>
 </head>
 
 <body data-urlprefix="{{ url('/')  }}" data-authorized="{{ $hasGithubToken ? "true" : "false" }}">
@@ -49,11 +48,12 @@
             @if($hasGithubToken)
                 <form action="{{ route('logout') }}" method="post" class="form">
                     @csrf
-                    <button class="button" type="submit">
-                        <i class="fa-regular fa-trash"></i>
+                    <button class="button" type="submit"
+                            style="background: #ff0000; border-color: #ff0000;color: whitesmoke;">
                         Logout
                     </button>
                 </form>
+                <br>
             @else
                 <button class="button" onclick="login_with_github()" id="github_login_button">
                     <i class="fa-regular fa-trash"></i>
@@ -61,16 +61,10 @@
                         Get Github Code
                     </span>
                 </button>
-
+                <br>
                 <input type="text" id="github_user_code"
                        style="display: none; border: none; background: none; color: white; width: 100%; text-align: center; font-size: 20px; font-weight: bold; margin-top: 10px; margin-bottom: 10px;"/>
-
-                <a class="button" href="https://github.com/login/device" target="_blank">
-                    <i class="fa-regular fa-trash"></i>
-                    <span>
-                        Go to Github Auth Page
-                    </span>
-                </a>
+                <br>
             @endif
 
 
@@ -85,18 +79,7 @@
                     <input type="checkbox" id="theme-toggler"/>
                     <label for="theme-toggler"></label>
                 </div>
-                <div class="field">
-                    <span>{{_('Language')}}</span>
-                    <select
-                        class="dropdown"
-                        id="language"
-                        onchange="changeLanguage(this.value)"></select>
-                </div>
             </div>
-            <a class="info" href="#" target="_blank">
-                <i class="fa-brands fa-github"></i>
-                <span class="conversation-title"> {{_('Version')}}: 1.0.0 </span>
-            </a>
         </div>
     </div>
     <div class="conversation">
@@ -121,22 +104,6 @@
         </div>
         <div>
             <div class="options-container">
-                <div class="buttons">
-                    <div class="field">
-                        <select class="dropdown" name="model" id="model">
-                            <option value="gpt-3.5-turbo" selected>GPT-3.5</option>
-                            {{--                            <option value="gpt-3.5-turbo-16k">GPT-3.5-turbo-16k</option>--}}
-                            {{--                            <option value="gpt-4" selected>GPT-4</option>--}}
-                        </select>
-                    </div>
-                    <div class="field">
-                        <select class="dropdown" name="jailbreak" id="jailbreak">
-                            <option value="default" selected>{{_('Default')}}</option>
-                            <option value="gpt-dan-11.0">{{_('DAN')}}</option>
-                            <option value="gpt-evil">{{_('Evil')}}</option>
-                        </select>
-                    </div>
-                </div>
                 <div class="field checkbox">
                     <input type="checkbox" id="switch"/>
                     <label for="switch"></label>
@@ -156,12 +123,11 @@
 </script>
 <script src="{{ asset('js/icons.js') }}"></script>
 <script src="{{ asset('js/chat.js') }}" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/markdown-it@latest/dist/markdown-it.min.js"></script>
+<script src="{{ asset('js/markdown-it.min.js') }}"></script>
 <script src="{{ asset('js/highlight.min.js') }}"></script>
 <script src="{{ asset('js/highlightjs-copy.min.js') }}"></script>
 <script src="{{ asset('js/theme-toggler.js') }}"></script>
 <script src="{{ asset('js/sidebar-toggler.js') }}"></script>
-<script src="{{ asset('js/change-language.js') }}"></script>
 <script src="{{ asset('js/main.js') }}" defer></script>
 </body>
 </html>
