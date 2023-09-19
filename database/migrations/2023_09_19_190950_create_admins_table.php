@@ -11,18 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('github_user_code')->nullable();
-            $table->string('github_device_code')->nullable();
-            $table->string('github_token')->nullable();
-
-            $table->string('copilot_token')->nullable();
-            $table->string('copilot_token_expires_at')->nullable();
-
             $table->rememberToken();
             $table->timestamps();
         });
@@ -33,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('admins');
     }
 };
